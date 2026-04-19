@@ -98,3 +98,10 @@
 --- SESIÓN INICIADA: Sun Apr 19 11:22:06 AM -04 2026 ---
 [BASH] RAM: 9,8Gi | CPU Load: 296,
 [2026-04-19 11:22:34.301211] [PYTHON] Check manual de status: CPU: 13.3% | RAM: 25.4% | CPU: 100.0% | RAM: 25.4%
+--- SESIÓN INICIADA: Sun Apr 19 11:54:03 AM -04 2026 ---
+[BASH] RAM: 6,8Gi | CPU Load: 102,
+[2026-04-19 11:54:08.347077] [PYTHON] Check manual de status: CPU: 6.8% | RAM: 32.0% | CPU: 0.0% | RAM: 32.0%
+[2026-04-19 12:03:19.944012] [PYTHON] Check manual de status: CPU: 8.4% | RAM: 33.4% | CPU: 100.0% | RAM: 33.4%
+[2026-04-19 13:04:19.995674] [PYTHON] Check manual de status: CPU: 10.1% | RAM: 35.9% | CPU: 0.0% | RAM: 35.9%
+[2026-04-19 15:20:54.938020] [PYTHON] Check manual de status: CPU: 18.9% | RAM: 41.7% | CPU: 0.0% | RAM: 41.7%
+[2026-04-19 15:34:57.042666] [PYTHON] Check manual de status: CPU: 20.5% | RAM: 31.6% | CPU: 0.0% | RAM: 31.6%

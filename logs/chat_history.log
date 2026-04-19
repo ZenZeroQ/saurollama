@@ -10,3 +10,15 @@
 [2026-04-19 11:23:11] USUARIO: telemetria
 [2026-04-19 11:23:11] SAUR: Esta es una respuesta simulada del motor.
 ------------------------------
+[2026-04-19 11:54:15] USUARIO: ¿qué hora es?
+[2026-04-19 11:54:15] SAUR: Esta es una respuesta simulada del motor.
+------------------------------
+[2026-04-19 11:54:24] USUARIO: ¿qué clima hace?
+[2026-04-19 11:54:24] SAUR: Esta es una respuesta simulada del motor.
+------------------------------
+[2026-04-19 11:54:31] USUARIO: ¿qué clima hace?
+[2026-04-19 11:54:31] SAUR: Esta es una respuesta simulada del motor.
+------------------------------
+[2026-04-19 15:35:47] USUARIO: hola
+[2026-04-19 15:35:47] SAUR: Error: Extra data: line 2 column 1 (char 98)
+------------------------------

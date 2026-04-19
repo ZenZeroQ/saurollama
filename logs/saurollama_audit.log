@@ -1,0 +1,65 @@
+--- INICIO DE SESIÓN: Sun Apr 19 07:43:47 AM -04 2026 ---
+[BASH] Midiendo estado inicial del DellSaurio...
+[BASH] RAM Disponible: 7,7Gi | Carga CPU: 042,
+[BASH] Lanzando SaurOllama...
+[2026-04-19 07:43:47] [PYTHON] Control del log asumido por SaurOllama Core.
+[2026-04-19 07:43:47] [METRIC] CPU: 72.5% | RAM: 28.6%
+--- INICIO DE SESIÓN: Sun Apr 19 08:07:04 AM -04 2026 ---
+[BASH] Midiendo estado inicial del DellSaurio...
+[BASH] RAM Disponible: 9,2Gi | Carga CPU: 109,
+[BASH] Lanzando SaurOllama...
+--- INICIO DE SESIÓN: Sun Apr 19 08:23:45 AM -04 2026 ---
+[BASH] Midiendo estado inicial del DellSaurio...
+[BASH] RAM Disponible: 7,2Gi | Carga CPU: 105
+[BASH] Lanzando SaurOllama...
+--- INICIO DE SESIÓN: Sun Apr 19 08:23:49 AM -04 2026 ---
+[BASH] Midiendo estado inicial del DellSaurio...
+[BASH] RAM Disponible: 7,2Gi | Carga CPU: 105
+[BASH] Lanzando SaurOllama...
+--- INICIO DE SESIÓN: Sun Apr 19 08:25:53 AM -04 2026 ---
+[BASH] Midiendo estado inicial del DellSaurio...
+[BASH] RAM Disponible: 7,3Gi | Carga CPU: 103
+[BASH] Lanzando SaurOllama...
+--- INICIO DE SESIÓN: Sun Apr 19 08:25:59 AM -04 2026 ---
+[BASH] Midiendo estado inicial del DellSaurio...
+[BASH] RAM Disponible: 7,3Gi | Carga CPU: 102
+[BASH] Lanzando SaurOllama...
+--- INICIO DE SESIÓN: Sun Apr 19 08:54:34 AM -04 2026 ---
+[BASH] Midiendo estado inicial del DellSaurio...
+[BASH] RAM Disponible: 6,9Gi | Carga CPU: 060
+[BASH] Lanzando SaurOllama...
+[2026-04-19 08:54:35] [PYTHON] Control del log asumido por SaurOllama Core.
+[2026-04-19 08:54:35] [METRIC] CPU: 51.6% | RAM: 30.2%
+[2026-04-19 08:54:47] [PYTHON] Consulta manual de estatus: 
+    📊 --- ESTADO DEL DELLSAURIO ---
+    💻 CPU: 3.5%
+    🧠 RAM: 30.1% (Usado: 3999 MB / Total: 16671 MB)
+    --------------------------------
+    
+[2026-04-19 08:54:47] [METRIC] CPU: 100.0% | RAM: 30.1%
+--- INICIO DE SESIÓN: Sun Apr 19 09:04:17 AM -04 2026 ---
+[BASH] Midiendo estado inicial del DellSaurio...
+[BASH] RAM Disponible: 6,6Gi | Carga CPU: 083
+[BASH] Lanzando SaurOllama...
+[2026-04-19 09:04:18] [PYTHON] Control del log asumido por SaurOllama Core.
+[2026-04-19 09:04:18] [METRIC] CPU: 51.6% | RAM: 31.7%
+[2026-04-19 09:04:24] [PYTHON] Consulta manual de estatus: 
+    📊 --- ESTADO DEL DELLSAURIO ---
+    💻 CPU: 6.3%
+    🧠 RAM: 31.6% (Usado: 4237 MB / Total: 16671 MB)
+    --------------------------------
+    
+[2026-04-19 09:04:24] [METRIC] CPU: 0.0% | RAM: 31.6%
+--- INICIO DE SESIÓN: Sun Apr 19 09:04:59 AM -04 2026 ---
+[BASH] Midiendo estado inicial del DellSaurio...
+[BASH] RAM Disponible: 6,6Gi | Carga CPU: 080
+[BASH] Lanzando SaurOllama...
+[2026-04-19 09:05:00] [PYTHON] Control del log asumido por SaurOllama Core.
+[2026-04-19 09:05:00] [METRIC] CPU: 55.2% | RAM: 31.6%
+[2026-04-19 09:05:12] [PYTHON] Consulta manual de estatus: 
+    📊 --- ESTADO DEL DELLSAURIO ---
+    💻 CPU: 8.1%
+    🧠 RAM: 31.4% (Usado: 4209 MB / Total: 16671 MB)
+    --------------------------------
+    
+[2026-04-19 09:05:12] [METRIC] CPU: 0.0% | RAM: 31.4%

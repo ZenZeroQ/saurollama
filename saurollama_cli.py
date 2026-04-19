@@ -1,4 +1,8 @@
 import ollama, psutil, requests, feedparser, os, time, json
+import sys
+import datetime
+import psutil # Esta librería será tu mejor amiga en la Etapa 2
+
 from rich.console import Console
 from rich.panel import Panel
 
@@ -58,13 +62,59 @@ def print_verbose(title, data):
     formatted_json = json.dumps(data, indent=2, ensure_ascii=False)
     console.print(Panel(formatted_json, border_style="magenta", subtitle="RAW_DATA"))
 
+def log_system_status(log_path, message):
+    # Obtener uso de recursos actual desde Python
+    cpu_usage = psutil.cpu_percent()
+    ram_usage = psutil.virtual_memory().percent
+    
+    timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    with open(log_path, "a") as f:
+        f.write(f"[{timestamp}] [PYTHON] {message}\n")
+        f.write(f"[{timestamp}] [METRIC] CPU: {cpu_usage}% | RAM: {ram_usage}%\n")
+
+
+def mostrar_telemetria():
+    cpu = psutil.cpu_percent(interval=1)
+    ram = psutil.virtual_memory()
+    # Si tienes GPU NVIDIA, podrías sumar métricas de VRAM aquí
+    
+    status_msg = f"""
+    📊 --- ESTADO DEL DELLSAURIO ---
+    💻 CPU: {cpu}%
+    🧠 RAM: {ram.percent}% (Usado: {ram.used // 10**6} MB / Total: {ram.total // 10**6} MB)
+    --------------------------------
+    """
+    print(status_msg)
+    return status_msg # También lo devolvemos para el log
+
 # --- BUCLE PRINCIPAL ---
 console.print(Panel("[bold green]SAUROLLAMA CLI v2.0[/bold green] - Audit Mode: ON"))
 
+# Al iniciar el script:
+if "--log-file" in sys.argv:
+    log_path = sys.argv[sys.argv.index("--log-file") + 1]
+    log_system_status(log_path, "Control del log asumido por SaurOllama Core.")
+
+
 while True:
+
+# Dentro de tu bucle de chat:
+    user_input = input("🦖 Usuario: ")
+
+# Mini-Dynatrace integrado
+    if user_input.lower() == "/status":
+        info = mostrar_telemetria() # La función que creamos
+        log_system_status(log_path, f"Consulta manual de estatus: {info}")
+        continue  # <--- Ahora sí está dentro del bucle
+
     status = f"CPU: {psutil.cpu_percent()}% | RAM: {psutil.virtual_memory().percent}%"
     user_msg = console.input(f"\n[dim]{status}[/dim] [bold green]>>> [/bold green]")
-    
+
+
+
+
+
     if user_msg.lower() in ['exit', 'quit']: break
 
     with console.status("[yellow]Procesando flujo..."):

@@ -1,121 +1,257 @@
-from flask import Flask, render_template, request, jsonify
-from bs4 import BeautifulSoup
-import ollama
-import requests
+# -*- coding: utf-8 -*-
+"""
+SaurOllama Web - Servidor Flask con Interfaz Web
+
+Este modulo proporciona la interfaz web para SaurOllama.
+Utiliza brain.py para la comunicacion con Ollama y logging centralizado.
+
+Ejecucion:
+    python3 app.py
+
+El servidor estara disponible en:
+    - http://localhost:5000 (local)
+    - http://0.0.0.0:5000 (accesible desde la red)
+
+Autor: DellSaurio Labs
+Version: 1.0.0
+"""
+
 import os
-import psutil
+from flask import Flask, render_template, request, jsonify
+from datetime import datetime
+
+# Importar el modulo centralizado
+from brain import (
+    brain,
+    log_manager,
+    obtener_status_sistema,
+    formatear_status_sistema
+)
+
+
+# =============================================================================
+# CONFIGURACION DE FLASK
+# =============================================================================
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'saurollama-secret-key-2024')
 
-# -- FUNCIONES LEER HTML
-
-def read_local_html(filename):
-    try:
-        # Buscamos el archivo en tu directorio de proyectos
-        with open(filename, "r", encoding="utf-8") as f:
-            soup = BeautifulSoup(f, "html.parser")
-            # Extraemos solo el texto, eliminando scripts y estilos
-            for script in soup(["script", "style"]):
-                script.extract()
-            return soup.get_text(separator=' ', strip=True)[:2000] # Limitamos para no saturar a Ollama
-    except Exception as e:
-        return f"Error reading file: {e}"
+# Configuracion de logging para Flask
+logging.basicConfig(
+    level=10,  # DEBUG
+    format='%(asctime)s | %(levelname)s | %(message)s'
+)
 
 
-# --- FUNCIONES DE APOYO (SKILLS) ---
+# =============================================================================
+# FUNCIONES AUXILIARES
+# =============================================================================
 
-def get_weather(city="Santiago"):
-    try:
-        res = requests.get(f"https://wttr.in/{city}?format=3")
-        return res.text
-    except:
-        return "Weather service offline."
+def timestamp_actual():
+    """Devuelve el timestamp actual formateado."""
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-def get_news():
-    return "Global News: Local AI agents are now capable of system monitoring."
 
-def save_report(content):
-    try:
-        with open("last_news_report.txt", "w") as f:
-            f.write(content)
-        return "File saved."
-    except:
-        return "Save failed."
-
-def get_system_status():
-    cpu = psutil.cpu_percent(interval=1)
-    ram = psutil.virtual_memory().percent
-    return f"CPU: {cpu}% | RAM: {ram}%"
-
-# --- RUTAS ---
+# =============================================================================
+# RUTAS PRINCIPALES
+# =============================================================================
 
 @app.route('/')
 def home():
+    """Pagina principal - Interface Web de SaurOllama."""
+    log_manager.log_audit("Acceso a pagina principal")
     return render_template('index.html')
 
-@app.route('/chat', methods=['POST'])
-def chat():
-    user_input = request.json.get("message", "").lower()
-    
-    # 1. CLASIFICACIÓN DE INTENCIÓN
-   
-   # decision_prompt = (
-    #    "Identify intent: WEATHER, NEWS, STATUS, or NONE. "
-    #    "User: " + user_input
-    #)
-    decision_prompt = "Identify intent: WEATHER, NEWS, STATUS, ANALYZE, or NONE. User: " + user_input
+
+@app.route('/status')
+def status():
+    """Endpoint para obtener el estado del sistema."""
     try:
-        res_decision = ollama.chat(model='gemma:2b', messages=[
-            {'role': 'user', 'content': decision_prompt}
-        ])
-        debug_val = res_decision['message']['content'].strip().upper()
-    except:
-        debug_val = "NONE"
+        estado = obtener_status_sistema()
+        return jsonify({
+            'success': True,
+            'data': estado,
+            'timestamp': timestamp_actual()
+        })
+    except Exception as e:
+        log_manager.log_error("Error al obtener status", e)
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
 
-    print(f"\033[1;33m[DEBUG]: Intent -> {debug_val}\033[0m")
 
-    context_data = ""
-    
-    # 2. LÓGICA DE RESPUESTA
-    # 2. LÓGICA DE RESPUESTA (La Cascada)
-    if "STATUS" in debug_val:
-        context_data = get_system_status()
-        print(f"\033[1;32m[CAPA SISTEMA]: {context_data}\033[0m")
-        
-    elif "WEATHER" in debug_val:
-        context_data = get_weather()
-        print(f"\033[1;36m[CAPA API]: Clima recibido\033[0m")
-        
-    elif "NEWS" in debug_val:
-        context_data = get_news()
-        print(f"\033[1;35m[CAPA API]: Noticias recibidas\033[0m")
-        
-    elif "ANALYZE" in debug_val: # <--- AGREGAMOS ESTA NUEVA CAPA
-        # Buscamos archivos .html en tu directorio actual
-        html_files = [f for f in os.listdir('.') if f.endswith('.html')]
-        if html_files:
-            # Usamos la función que lee y limpia el HTML
-            context_data = f"Content of {html_files[0]}: " + read_local_html(html_files[0])
-            print(f"\033[1;34m[CAPA ANALISTA]: Analizando {html_files[0]}\033[0m")
+@app.route('/api/chat', methods=['POST'])
+def api_chat():
+    """Endpoint principal para chat con la IA.
+
+    Recibe:
+        {
+            "message": "texto del usuario",
+            "stream": false (opcional)
+        }
+
+    Devuelve:
+        {
+            "success": true,
+            "response": "respuesta del modelo",
+            "intent": "intencion detectada",
+            "timestamp": "..."
+        }
+    """
+    try:
+        # Obtener datos del request
+        data = request.get_json()
+        mensaje = data.get('message', '').strip()
+        usar_stream = data.get('stream', False)
+
+        if not mensaje:
+            return jsonify({
+                'success': False,
+                'error': 'Mensaje vacio'
+            }), 400
+
+        # Log del mensaje recibido
+        print(f"[API] Mensaje recibido: {mensaje}")
+        log_manager.log_audit(f"API Chat - Mensaje: {mensaje[:50]}...")
+
+        # Clasificar intencion
+        intencion = brain.clasificar_intencion(mensaje)
+        print(f"[API] Intencion: {intencion}")
+
+        # Procesar segun intencion
+        respuesta = ""
+
+        if intencion == 'STATUS':
+            respuesta = formatear_status_sistema()
+            log_manager.log_audit(f"Respuesta STATUS: {respuesta}")
+
+        elif intencion == 'TERMINAR':
+            respuesta = "Sesion terminada. Si necesitas algo mas, aqui estare."
+            log_manager.log_chat(mensaje, respuesta)
+
         else:
-            context_data = "No local HTML files found to analyze."
-            print("\033[1;31m[SISTEMA]: Error - No hay archivos HTML\033[0m")
+            # Usar Ollama para generar respuesta
+            respuesta = brain.chat(mensaje)
+            log_manager.log_chat(mensaje, respuesta)
 
-    # 3. GENERACIÓN FINAL
-    final_prompt = f"Context: {context_data}. User: {user_input}. Respond as Cyberpunk AI."
-    res_final = ollama.chat(model='gemma:2b', messages=[
-        {'role': 'user', 'content': final_prompt}
-    ])
+        return jsonify({
+            'success': True,
+            'response': respuesta,
+            'intent': intencion,
+            'timestamp': timestamp_actual()
+        })
 
-    # Guardado automático si son noticias
-    if "NEWS" in debug_val:
-        save_report(res_final['message']['content'])
+    except Exception as e:
+        log_manager.log_error("Error en API chat", e)
+        return jsonify({
+            'success': False,
+            'error': f'Error interno del servidor: {str(e)}'
+        }), 500
+
+
+@app.route('/api/health')
+def health():
+    """Endpoint de salud del servicio."""
+    ollama_ok = brain.verificar_servicio()
 
     return jsonify({
-        "response": res_final['message']['content'],
-        "debug": debug_val,
-        "sys_status": get_system_status() # Enviamos el estado a la web
+        'status': 'ok' if ollama_ok else 'degraded',
+        'ollama': 'online' if ollama_ok else 'offline',
+        'modelo': brain.modelo,
+        'timestamp': timestamp_actual()
     })
 
+
+@app.route('/api/history')
+def history():
+    """Endpoint para obtener el historial de chat."""
+    try:
+        chat_log = os.path.join('./logs', 'chat_history.log')
+
+        if os.path.exists(chat_log):
+            with open(chat_log, 'r', encoding='utf-8') as f:
+                lineas = f.readlines()
+                # Devolver ultimas 50 lineas
+                ultimas = lineas[-50:] if len(lineas) > 50 else lineas
+                contenido = ''.join(ultimas)
+        else:
+            contenido = "No hay historial disponible."
+
+        return jsonify({
+            'success': True,
+            'history': contenido,
+            'timestamp': timestamp_actual()
+        })
+
+    except Exception as e:
+        log_manager.log_error("Error al obtener historial", e)
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+
+# =============================================================================
+# MANEJADORES DE ERRORES
+# =============================================================================
+
+@app.errorhandler(404)
+def not_found(e):
+    """Manejador para paginas no encontradas."""
+    return jsonify({
+        'success': False,
+        'error': 'Pagina no encontrada'
+    }), 404
+
+
+@app.errorhandler(500)
+def internal_error(e):
+    """Manejador para errores internos."""
+    log_manager.log_error("Error 500 en Flask", e)
+    return jsonify({
+        'success': False,
+        'error': 'Error interno del servidor'
+    }), 500
+
+
+# =============================================================================
+# INICIALIZACION
+# =============================================================================
+
+def iniciar_servidor(host='0.0.0.0', puerto=5000, debug=True):
+    """Inicia el servidor Flask.
+
+    Args:
+        host: Host donde escuchara el servidor (0.0.0.0 para toda la red)
+        puerto: Puerto de comunicacion
+        debug: Modo debug (True para desarrollo)
+    """
+    print("=" * 60)
+    print("SaurOllama Web Server")
+    print("=" * 60)
+
+    # Verificar Ollama
+    if brain.verificar_servicio():
+        print(f" Ollama: OPERATIVO ({brain.modelo})")
+    else:
+        print(" Ollama: NO DISPONIBLE (modo simulacion)")
+
+    # Mostrar informacion del sistema
+    print(f" Sistema: {formatear_status_sistema()}")
+    print("=" * 60)
+
+    # Log de inicio
+    log_manager.log_audit(f"Servidor Flask iniciado en {host}:{puerto}")
+
+    # Iniciar servidor
+    app.run(host=host, port=puerto, debug=debug)
+
+
+# =============================================================================
+# PUNTO DE ENTRADA
+# =============================================================================
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Por defecto, escuchar en todas las interfaces
+    iniciar_servidor(host='0.0.0.0', puerto=5000, debug=True)

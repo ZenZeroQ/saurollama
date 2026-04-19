@@ -18,12 +18,19 @@ echo "[BASH] Lanzando SaurOllama..." >> $LOG_FILE
 echo "🦖 Iniciando Motores de SaurOllama..."
 
 
-# 1. Verificar si Ollama está corriendo
+# 1. Verificar e iniciar Ollama
 if ! pgrep -x "ollama" > /dev/null
 then
     echo "⚠️ Ollama no está activo. Iniciando servicio..."
-    ollama serve & 
-    sleep 5
+    ollama serve > /dev/null 2>&1 &
+    
+    # Bucle de espera inteligente (Sustituye al sleep 5)
+    echo -n "⏳ Esperando a que el motor caliente"
+    until curl -s http://localhost:11434 > /dev/null; do
+        printf '.'
+        sleep 1
+    done
+    echo " ✅ ¡Motor listo!"
 fi
 
 # 2. Iniciar el servidor de Flask (tu backend)

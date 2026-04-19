@@ -1,0 +1,143 @@
+/*definir_colores*/
+:root {
+
+}
+/*definir_colores*/
+
+.vue-comp-infografias {
+    /*clase_base*/
+}
+
+.vue-comp-infografias .vue_modal {
+	display: block;
+	position: fixed;
+	z-index: 100;
+	margin: 0;
+	padding: 0;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	overflow: auto; /* Enable scroll if needed */
+	/*background-color: rgb(0,0,0); */
+	background-color: rgba(0,0,0,0.8);
+}
+
+.vue-comp-infografias .vue_modal .modal-dialog {
+	position: relative;
+	margin: 0;
+	padding: 10px;
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+
+.vue-comp-infografias .vue_modal .flecha, 
+.vue-comp-infografias .vue_modal .texto_burbuja {
+    position: absolute;
+}
+.vue-comp-infografias .vue_modal .well.well-sm.texto_burbuja {
+    border: 2px solid #fff;
+    color: #fff;
+    background-color: rgb(30, 157, 147, 1);
+    line-height: 12px;
+    text-indent: 0;
+}
+
+.vue-comp-infografias .vue_modal .flecha:hover {
+    cursor: pointer;
+	opacity: 0.8;
+}
+
+.vue-comp-infografias .vue_modal .flecha {
+	z-index: 100;
+}
+.vue-comp-infografias .vue_modal .texto_burbuja {
+	z-index: 101;
+}
+
+.vue-comp-infografias .vue_modal .link_texto_punto_titulo, 
+.vue-comp-infografias .vue_modal .link_texto_punto {
+    margin-top: 8px;
+    line-height: 12px;
+    text-indent: 0;
+}
+.vue-comp-infografias .vue_modal .link_texto_punto:hover {
+    cursor: pointer; 
+    opacity: 0.8;
+}
+
+/* modal Content */
+.vue-comp-infografias .vue_modal div.modal-content {
+	position: relative;
+	background-color: white;
+	margin: auto;
+	padding: 0;
+	border: 1px solid #ddd;
+	width: 100%;
+	box-shadow: 0 4px 8px 0 rgba(0,0,0,0.5),0 6px 20px 0 rgba(0,0,0,0.5);
+	-webkit-animation-name: elt_modal_animatetop;
+	-webkit-animation-duration: 0.4s;
+	animation-name: elt_modal_animatetop;
+	animation-duration: 0.5s
+}
+@media (max-width: 480px) {
+	.vue-comp-infografias .vue_modal div.modal-content {
+    	width: 90%;
+	}
+}
+/* animacion */
+@-webkit-keyframes elt_modal_animatetop {
+	from {top:-300px; opacity:0}
+	to {top:0; opacity:1}
+}
+
+@keyframes elt_modal_animatetop {
+	from {top:-300px; opacity:0}
+	to {top:0; opacity:1}
+}
+
+/* Boton Cerrar */
+.vue-comp-infografias .vue_modal div.modal-content div.modal-header span.close {
+	color: #384042;
+	float: right;
+	font-size: 28px;
+	font-weight: bold;
+}
+.vue-comp-infografias .vue_modal div.modal-content div.modal-header span.clos:hover,
+.vue-comp-infografias .vue_modal div.modal-content div.modal-header span.clos:focus {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+}
+.vue-comp-infografias .vue_modal div.modal-content div.modal-header {
+	padding: 10px 10px;
+	background-color: #f5f5f5;
+	border-color: #ddd;
+	color: black;
+	text-align: left;
+}
+.vue-comp-infografias .vue_modal div.modal-content div.modal-header h4 {
+	margin-bottom: 0px;
+}
+.vue-comp-infografias .vue_modal div.modal-content div.modal-header h4 small {
+	color: black;
+}
+.vue-comp-infografias .vue_modal div.modal-content div.modal-body {
+	padding: 10px 10px;
+	background-color: white;
+	color: black;
+	text-align: left;
+    height: auto;
+}
+.vue-comp-infografias .vue_modal div.modal-content div.modal-footer {
+	padding: 10px 10px;
+	background-color: #f5f5f5;
+	border-color: #ddd;
+	color: black;
+	text-align: left;
+}
+.vue-comp-infografias .vue_modal div.modal-content div.modal-footer h4 {
+	margin-bottom: 0px;
+}
+

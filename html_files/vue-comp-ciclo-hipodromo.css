@@ -1,0 +1,42 @@
+/*definir_colores*/
+:root {
+
+}
+/*definir_colores*/
+
+.vue-comp-ciclo-hipodromo {
+    /*clase_base*/
+}
+
+
+/*div uso horizontal*/
+.vue-comp-ciclo-hipodromo div.celda_info {
+    cursor: pointer;
+    /*display: inline-block;*/
+    /*width: 24.5%;*/
+    /*height: 50px;*/
+    /*align-content: center;*/
+    /*padding: 10px;*/
+}
+
+.vue-comp-ciclo-hipodromo div.celda_info:hover {
+    /*background-color: #f7f9fb;*/
+    opacity: 0.8;
+}
+
+.vue-comp-ciclo-hipodromo div.celda_info span {
+    display: block;
+    font-size: 10px;
+}
+
+.vue-comp-ciclo-hipodromo div.celda_info span.catagory {
+    text-transform: uppercase;
+    font-weight: 400;
+}
+
+.vue-comp-ciclo-hipodromo div.celda_info span.indicators-title {
+    font-size: 20px;
+    line-height: 22px;
+    font-weight: 700;
+}
+/*div uso horizontal*/

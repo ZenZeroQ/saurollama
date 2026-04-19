@@ -1,0 +1,14 @@
+/*definir_colores*/
+:root {
+
+}
+/*definir_colores*/
+
+.vue-comp-contacto {
+    /*clase_base*/
+}
+
+.vue-comp-contacto .img-thumbnail:nth-child(2) {
+    cursor: pointer;
+}
+

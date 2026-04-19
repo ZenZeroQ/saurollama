@@ -95,3 +95,6 @@
     --------------------------------
     
 [2026-04-19 10:28:56] [METRIC] CPU: 0.0% | RAM: 40.4%
+--- SESIÓN INICIADA: Sun Apr 19 11:22:06 AM -04 2026 ---
+[BASH] RAM: 9,8Gi | CPU Load: 296,
+[2026-04-19 11:22:34.301211] [PYTHON] Check manual de status: CPU: 13.3% | RAM: 25.4% | CPU: 100.0% | RAM: 25.4%
